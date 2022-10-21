@@ -1,0 +1,11 @@
+:root {
+    --field-size: 800px
+}
+
+.field {
+    height: var(--field-size);
+    width: var(--field-size);
+    display: flex;
+    background-color: gray;
+    flex-wrap: wrap;
+}
