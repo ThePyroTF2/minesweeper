@@ -5,7 +5,7 @@ import Field from './Components/field';
 function App() {
   return (
     <div className="app">
-      <Field mines={100}/>
+      <Field/>
     </div>
   );
 }

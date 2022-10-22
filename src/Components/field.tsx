@@ -2,37 +2,50 @@ import React from 'react'
 import Mine from './mine'
 import '../css/field.css'
 
-type props = {
-    mines: number
-}
+const Field = () => {
+    var mines: any = []
 
-const Field = (props: props) => {
-    var mines = []
-    var mineValues = []
-    for(var x = 0; x < 100; x++) {
-        mineValues[x] = false
+    for(var b = 0; b < 10; b++) {
+        mines.push([])
     }
+    // Values of all mines as a 2d array of value pairs
+    var mineValues: any = []
+
+    // Fill mineValues with 10 rows
+    for(var x = 0; x < 10; x++) {
+        mineValues.push([])
+    }
+
+    // Fill all rows with mines.
+    // boolean = whether or not mine is a bomb
+    // number = number of adjacent bombs
+    for(var y = 0; y < 10; y++) {
+        for(var z = 0; z < 10; z++) {
+            mineValues[y].push([false, 0])
+        }
+    }
+
+    // Generate bombs
     var nMines = 40
 
     for(var n = 0; n < nMines;) {
-        var mineChoice = Math.floor(Math.random() * 100)
+        var mineChoice1 = Math.floor(Math.random() * 10)
+        var mineChoice2 = Math.floor(Math.random() * 10)
 
-        if(!mineValues[mineChoice]) {
-            mineValues[mineChoice] = true
+        if(!mineValues[mineChoice1][mineChoice2][0]) {
+            mineValues[mineChoice1][mineChoice2][0] = true
             nMines--
         }
     }
 
-    for(var i = 0; i < props.mines; i++) {
-        mines[i] = <Mine adjacent={0} isMine={mineValues[i]}/>
+
+
+    for(var i = 0; i < 10; i++) {
+        for(var a = 0; a < 10; a++) {
+            mines[i][a] = <Mine isMine={mineValues[i][a][0]} adjacent={mineValues[i][a][1]}/>
+        }
     }
-
     
-
-    // for(var mine of mines) {
-
-    // }
-
     return(
         <div className="field">
             {mines}
