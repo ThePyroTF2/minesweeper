@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="app">
       <Field/>
+      <a href="https://github.com/ThePyroTF2/minesweeper">source</a>
     </div>
   );
 }
