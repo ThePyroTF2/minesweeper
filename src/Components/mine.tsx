@@ -9,10 +9,30 @@ type props = {
 const Mine = (props: props) => {
     
     const [num, setNum] = useState('')
-    var [dug, setDug] = useState(false)
+    const [dug, setDug] = useState(false)
+    const [className, setClassName] = useState('mine')
     
     return(
-        <div className="mine" onContextMenu={(event) => {event.preventDefault(); if(!dug) setNum(num === 'F' ? '' : 'F')}} onClick={(event) => {setNum(props.isMine ? 'B' : props.adjacent.toString()); setDug(true)}}>
+        <div className={className}
+            onContextMenu={(event) => {
+                event.preventDefault()
+                if(!dug) {
+                    if(num === 'F') {
+                        setClassName('mine')
+                        setTimeout(() => setNum(''), 75)
+                    }
+                    else {
+                        setClassName('mine flagged')
+                        setNum('F')
+                    }
+                }
+            }}
+
+            onClick={() => {
+                setNum(props.isMine ? 'B' : props.adjacent.toString())
+                setDug(true)
+                setClassName(props.isMine ? 'mine bomb' : 'mine dug')
+        }}>
             <p>{num}</p>
         </div>
     )
