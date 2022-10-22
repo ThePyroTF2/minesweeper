@@ -5,7 +5,7 @@
     --mine-size: 80px;
 }
 
-.mine {
+.tile {
     border-radius: 5px;
     display: flex;
     cursor: pointer;

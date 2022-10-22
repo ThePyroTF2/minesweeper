@@ -1,54 +1,87 @@
 import React from 'react'
-import Mine from './mine'
+import Tile from './tile'
 import '../css/field.css'
 
 const Field = () => {
-    var mines: any = []
+    // Tiles with which to fill the field
+    var tiles: any = []
 
     for(var b = 0; b < 10; b++) {
-        mines.push([])
+        tiles.push([])
     }
-    // Values of all mines as a 2d array of value pairs
-    var mineValues: any = []
+    // Values of all tiles as a 2d array of value pairs
+    var tileValues: any = []
 
-    // Fill mineValues with 10 rows
+    // Fill tileValues with 10 rows
     for(var x = 0; x < 10; x++) {
-        mineValues.push([])
+        tileValues.push([])
     }
 
-    // Fill all rows with mines.
-    // boolean = whether or not mine is a bomb
+    // Fill all rows with tiles.
+    // boolean = whether or not tile is a bomb
     // number = number of adjacent bombs
-    for(var y = 0; y < 10; y++) {
-        for(var z = 0; z < 10; z++) {
-            mineValues[y].push([false, 0])
+    for(var row = 0; row < 10; row++) {
+        for(var column = 0; column < 10; column++) {
+            tileValues[row].push([false, 0])
         }
     }
 
     // Generate bombs
-    var nMines = 40
+    var nBombs = 40
 
-    for(var n = 0; n < nMines;) {
-        var mineChoice1 = Math.floor(Math.random() * 10)
-        var mineChoice2 = Math.floor(Math.random() * 10)
+    for(var n = 0; n < nBombs;) {
+        var row = Math.floor(Math.random() * 10)
+        var column = Math.floor(Math.random() * 10)
+        var tileChoice = tileValues[row][column]
 
-        if(!mineValues[mineChoice1][mineChoice2][0]) {
-            mineValues[mineChoice1][mineChoice2][0] = true
-            nMines--
+        if(!tileChoice[0]) {
+            tileChoice[0] = true
+            nBombs--
         }
     }
 
+    for(var row = 0; row < 10; row++) {
+        for(var column = 0; column < 10; column++) {
+            for(var adjTile = 0; adjTile < 8; adjTile++) {
+                var x: number
+                var y: number
 
+                switch(adjTile) {
+                    case 0: case 1: case 2:
+                        x = row - 1
+                        y = column - 1 + adjTile
+                        break
+                    case 3:
+                        x = row
+                        y = column - 1
+                        break
+                    case 4:
+                        x = row
+                        y = column + 1
+                        break
+                    case 5: case 6: default:
+                        x = row + 1
+                        y = column - 6 + adjTile
+                        break
+                }
 
-    for(var i = 0; i < 10; i++) {
-        for(var a = 0; a < 10; a++) {
-            mines[i][a] = <Mine isMine={mineValues[i][a][0]} adjacent={mineValues[i][a][1]}/>
+                if(x < 0 || x > 9) continue
+                if(y < 0 || y > 9) continue
+
+                if(tileValues[x][y][0]) tileValues[row][column][1]++
+            }
+        }
+    }
+
+    for(var row = 0; row < 10; row++) {
+        for(var column = 0; column < 10; column++) {
+            tiles[row][column] = <Tile isBomb={tileValues[row][column][0]} adjacentBombs={tileValues[row][column][1]}/>
         }
     }
     
     return(
         <div className="field">
-            {mines}
+            {tiles}
         </div>
     )
 }
